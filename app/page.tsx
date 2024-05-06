@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { Form } from '@/components/form';
 import { TodoCard } from '@/components/todoCard';
-import { getTodosLocalStorage } from '@/lib/localStorage';
 
 export type TodoType = {
 	title: string;
@@ -11,7 +10,12 @@ export type TodoType = {
 
 export default function Home() {
 	const [todos, setTodos] = useState<TodoType[]>(
-		getTodosLocalStorage() || []
+		(function () {
+			if (typeof localStorage !== 'undefined')
+				return JSON.parse(
+					window.localStorage.getItem('todos') as string
+				);
+		})() || []
 	);
 
 	useEffect(() => {
