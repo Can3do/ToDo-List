@@ -12,6 +12,8 @@ export type TodoType = {
 	priority: 'high' | 'mid' | 'low';
 };
 
+export type TablesType = 'todos' | 'completedTodos'
+
 export default function Home() {
 	const [todos, setTodos] = useState<TodoType[]>(
 		(function () {

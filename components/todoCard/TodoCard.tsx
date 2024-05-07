@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-import { TodoType } from '@/app/page';
+import { TodoType, TablesType } from '@/app/page';
 import { Checkbox } from '../ui/checkbox';
 
 import { Cross1Icon, Pencil2Icon } from '@radix-ui/react-icons';
@@ -18,7 +18,7 @@ export const TodoCard = ({
 	todo: TodoType;
 	setTodos: Dispatch<SetStateAction<TodoType[]>>;
 	setCompletedTodos: Dispatch<SetStateAction<TodoType[]>>;
-	table: 'todos' | 'completedTodos';
+	table: TablesType;
 }) => {
 	const {id, title, description, date, priority} = todo
 	const [isEditting, setIsEditting] = useState(false);
