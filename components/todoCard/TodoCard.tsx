@@ -10,7 +10,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { Badge } from '@/components/ui/badge';
 
 export const TodoCard = ({
-	todo: { id, title, description, date, priority },
+	todo,
 	setTodos,
 	setCompletedTodos,
 	table,
@@ -20,9 +20,9 @@ export const TodoCard = ({
 	setCompletedTodos: Dispatch<SetStateAction<TodoType[]>>;
 	table: 'todos' | 'completedTodos';
 }) => {
+	const {id, title, description, date, priority} = todo
 	const [isEditting, setIsEditting] = useState(false);
-	const [currentTitleValue, setCurrentTitleValue] = useState(title);
-	const [currentDescValue, setcurrentDescValue] = useState(description);
+	const [currentEdittingValue, setCurrentEdittingValue] = useState(todo);
 
 	const deleteToDo = () => {
 		const setFunctionToDeleteFunction =
@@ -44,8 +44,8 @@ export const TodoCard = ({
 			if (todo.id !== id) return todo;
 			return {
 				...todo,
-				title: currentTitleValue,
-				description: currentDescValue,
+				title: currentEdittingValue.title,
+				description: currentEdittingValue.description,
 			};
 		});
 		return newTodosArray;
@@ -59,8 +59,7 @@ export const TodoCard = ({
 	};
 
 	const cancelEdit = () => {
-		setCurrentTitleValue(title);
-		setcurrentDescValue(description);
+		setCurrentEdittingValue(todo)
 		toggleIsEditting();
 	};
 
@@ -79,15 +78,15 @@ export const TodoCard = ({
 				{isEditting ? (
 					<>
 						<Input
-							value={currentTitleValue}
+							value={currentEdittingValue.title}
 							onChange={(e) =>
-								setCurrentTitleValue(e.target.value)
+								setCurrentEdittingValue({...currentEdittingValue, title: e.target.value})
 							}
 						></Input>
 						<Input
-							value={currentDescValue}
+							value={currentEdittingValue.description}
 							onChange={(e) =>
-								setcurrentDescValue(e.target.value)
+								setCurrentEdittingValue({...currentEdittingValue, description: e.target.value})
 							}
 						></Input>
 					</>
