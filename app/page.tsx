@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Form } from '@/components/form';
+
+import { AddTaskForm } from '@/components/addTaskForm';
 import { TodoCard } from '@/components/todoCard/TodoCard';
 import { Button } from '@/components/ui/button';
 
@@ -9,7 +10,7 @@ export type TodoType = {
 	title: string;
 	description: string;
 	date: Date;
-	priority: 'high' | 'mid' | 'low';
+	priority: 'high' | 'medium' | 'low';
 	completed: boolean;
 };
 
@@ -38,7 +39,7 @@ export default function Home() {
 				Just another todo app
 			</h1>
 
-			<Form setTodos={setTodos} />
+			<AddTaskForm setTodos={setTodos} />
 
 			<div className='flex flex-col gap-6 py-12'>
 				<p>{`Your tasks (${todos.length})`}</p>
@@ -55,7 +56,7 @@ export default function Home() {
 						))}
 					</ul>
 				) : (
-					<p className='text-muted'>You have no tasks</p>
+					<p className='text-muted-foreground'>You have no tasks</p>
 				)}
 			</div>
 
