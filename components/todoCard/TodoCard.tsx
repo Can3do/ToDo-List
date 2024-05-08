@@ -12,23 +12,19 @@ import { Badge } from '@/components/ui/badge';
 export const TodoCard = ({
 	todo,
 	setTodos,
-	setCompletedTodos,
 	table,
 }: {
 	todo: TodoType;
 	setTodos: Dispatch<SetStateAction<TodoType[]>>;
-	setCompletedTodos: Dispatch<SetStateAction<TodoType[]>>;
 	table: TablesType;
 }) => {
-	const {id, title, description, date, priority} = todo
+	const { id, title, description, date, priority } = todo;
 	const [isEditting, setIsEditting] = useState(false);
 	const [currentEdittingValue, setCurrentEdittingValue] = useState(todo);
 
 	const deleteToDo = () => {
-		const setFunctionToDeleteFunction =
-			table === 'todos' ? setTodos : setCompletedTodos;
-		setFunctionToDeleteFunction((oldTodos: TodoType[]) =>
-			oldTodos.filter((todo) => todo.id !== id)
+		setTodos((oldTodos: TodoType[]) =>
+			[...oldTodos].filter((todo) => todo.id !== id)
 		);
 	};
 
@@ -59,16 +55,16 @@ export const TodoCard = ({
 	};
 
 	const cancelEdit = () => {
-		setCurrentEdittingValue(todo)
+		setCurrentEdittingValue(todo);
 		toggleIsEditting();
 	};
 
 	const completeTodo = () => {
-		setCompletedTodos((oldCompletedTodos: TodoType[]) => [
-			...oldCompletedTodos,
-			{ title, description, id: id, date: date, priority },
-		]);
-		deleteToDo();
+		setTodos((oldTodos: TodoType[]) =>
+			oldTodos.map((todo) =>
+				todo.id === id ? { ...todo, completed: true } : todo
+			)
+		);
 	};
 
 	return (
@@ -80,13 +76,19 @@ export const TodoCard = ({
 						<Input
 							value={currentEdittingValue.title}
 							onChange={(e) =>
-								setCurrentEdittingValue({...currentEdittingValue, title: e.target.value})
+								setCurrentEdittingValue({
+									...currentEdittingValue,
+									title: e.target.value,
+								})
 							}
 						></Input>
 						<Input
 							value={currentEdittingValue.description}
 							onChange={(e) =>
-								setCurrentEdittingValue({...currentEdittingValue, description: e.target.value})
+								setCurrentEdittingValue({
+									...currentEdittingValue,
+									description: e.target.value,
+								})
 							}
 						></Input>
 					</>

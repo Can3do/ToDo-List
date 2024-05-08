@@ -3,13 +3,6 @@ import { Dispatch, SetStateAction } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select';
 
 import { type TodoType } from '@/app/page';
 import { generateId } from '@/lib/utils';
@@ -27,19 +20,14 @@ type SetPropsType = {
 export const Form = ({ setTodos }: SetPropsType) => {
 	const { handleSubmit, register, reset } = useForm<FormInputs>();
 
-	const crearTodo: SubmitHandler<FormInputs> = ({
-		title,
-		description,
-		priority,
-	}) => {
+	const crearTodo: SubmitHandler<FormInputs> = (TodoformFields) => {
 		setTodos((oldTodos) => [
 			...oldTodos,
 			{
-				title,
-				description,
+				...TodoformFields,
 				id: generateId(),
 				date: new Date(),
-				priority: priority,
+				completed: false,
 			},
 		]);
 		reset();

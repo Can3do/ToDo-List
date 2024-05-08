@@ -10,9 +10,10 @@ export type TodoType = {
 	description: string;
 	date: Date;
 	priority: 'high' | 'mid' | 'low';
+	completed: boolean;
 };
 
-export type TablesType = 'todos' | 'completedTodos'
+export type TablesType = 'todos' | 'completedTodos';
 
 export default function Home() {
 	const [todos, setTodos] = useState<TodoType[]>(
@@ -24,22 +25,12 @@ export default function Home() {
 		})() || []
 	);
 
-	const [completedTodos, setcompletedTodos] = useState<TodoType[]>(
-		(function () {
-			if (typeof localStorage !== 'undefined')
-				return JSON.parse(
-					window.localStorage.getItem('completedTodos') as string
-				);
-		})() || []
-	);
+	const uncompletedTodos = todos.filter((todo) => todo.completed === false);
+	const completedTodos = todos.filter((todo) => todo.completed === true);
 
 	useEffect(() => {
 		localStorage.setItem('todos', JSON.stringify(todos));
 	}, [todos]);
-
-	useEffect(() => {
-		localStorage.setItem('completedTodos', JSON.stringify(completedTodos));
-	}, [completedTodos]);
 
 	return (
 		<main className='flex justift-center min-h-20 flex-col  w-xl box-border  w-full max-w-7xl px-6 py-8 md:px-16 md:py-12'>
@@ -51,14 +42,13 @@ export default function Home() {
 
 			<div className='flex flex-col gap-6 py-12'>
 				<p>{`Your tasks (${todos.length})`}</p>
-				{todos.length > 0 ? (
+				{uncompletedTodos.length > 0 ? (
 					<ul className='flex flex-col gap-5'>
-						{todos.map((todo) => (
+						{uncompletedTodos.map((todo) => (
 							<li key={todo.id}>
 								<TodoCard
 									todo={todo}
 									setTodos={setTodos}
-									setCompletedTodos={setcompletedTodos}
 									table='todos'
 								/>
 							</li>
@@ -74,7 +64,11 @@ export default function Home() {
 					<p>{`Completed (${completedTodos.length})`}</p>
 					<Button
 						onClick={() => {
-							setcompletedTodos([]);
+							setTodos((oldTodos) =>
+								oldTodos.filter(
+									(todo) => todo.completed === false
+								)
+							);
 						}}
 						variant={'outline'}
 					>
@@ -89,7 +83,6 @@ export default function Home() {
 								<TodoCard
 									todo={completedTodo}
 									setTodos={setTodos}
-									setCompletedTodos={setcompletedTodos}
 									table='completedTodos'
 								/>
 							</li>
