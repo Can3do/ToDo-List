@@ -22,11 +22,8 @@ export const AddTaskDialog = ({
 	return (
 		<Dialog open={DialogOpen} onOpenChange={setDialogOpen}>
 			<DialogTrigger asChild>
-				<Button
-					variant='outline'
-					className='rounded-full aspect-square flex p-0'
-				>
-					<PlusIcon className='w-5 h-5' />
+				<Button variant='icon' className='aspect-square p-0 w-14 h-14'>
+					<PlusIcon className='w-6 h-6' />
 				</Button>
 			</DialogTrigger>
 			<DialogContent className='flex flex-col gap-6 '>

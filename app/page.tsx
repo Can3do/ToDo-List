@@ -56,10 +56,6 @@ export default function Home() {
 
 	return (
 		<main className='flex justift-center min-h-20 flex-col  w-xl box-border  w-full max-w-7xl px-6 py-8 md:px-16 md:py-12'>
-			<h1 className=' text-3xl font-semibold my-12'>
-				Just another todo app
-			</h1>
-
 			<div>
 				<AddTaskDialog setTodos={setTodos} />
 			</div>

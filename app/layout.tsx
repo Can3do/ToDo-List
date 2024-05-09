@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { DM_Sans } from 'next/font/google';
 import './globals.css';
 
+import { Header } from '@/components/Header';
+
 const font = DM_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -19,6 +21,7 @@ export default function RootLayout({
 			<body
 				className={`${font.className} flex flex-col items-center min-h-[110vh]`}
 			>
+				<Header />
 				{children}
 			</body>
 		</html>
