@@ -70,7 +70,7 @@ export const EditTaskForm = ({
 		},
 	});
 
-	const { id, title, description, date, priority } = todo;
+	const { id } = todo;
 	const [calendarOpen, setCalendarOpen] = useState(false);
 
 	const saveTodo = (formData: z.infer<typeof editTasksFormSchema>) => {
