@@ -1,20 +1,18 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-import { AddTaskForm } from '@/components/addTaskForm';
 import { TodoCard } from '@/components/todoCard/TodoCard';
 import { Button } from '@/components/ui/button';
+import { AddTaskDialog } from '@/components/addTaskDialog';
 
 export type TodoType = {
 	id: string;
 	title: string;
 	description: string;
 	date: Date;
-	priority: 'high' | 'medium' | 'low';
+	priority: 'high' | 'medium' | 'low' | '';
 	completed: boolean;
 };
-
-export type TablesType = 'todos' | 'completedTodos';
 
 export default function Home() {
 	const [todos, setTodos] = useState<TodoType[]>(
@@ -39,19 +37,16 @@ export default function Home() {
 				Just another todo app
 			</h1>
 
-			<AddTaskForm setTodos={setTodos} />
+			{/* <AddTaskForm setTodos={setTodos} /> */}
+			<AddTaskDialog setTodos={setTodos} />
 
 			<div className='flex flex-col gap-6 py-12'>
-				<p>{`Your tasks (${todos.length})`}</p>
+				<p>{`Your tasks (${uncompletedTodos.length})`}</p>
 				{uncompletedTodos.length > 0 ? (
 					<ul className='flex flex-col gap-5'>
 						{uncompletedTodos.map((todo) => (
 							<li key={todo.id}>
-								<TodoCard
-									todo={todo}
-									setTodos={setTodos}
-									table='todos'
-								/>
+								<TodoCard todo={todo} setTodos={setTodos} />
 							</li>
 						))}
 					</ul>
@@ -84,7 +79,6 @@ export default function Home() {
 								<TodoCard
 									todo={completedTodo}
 									setTodos={setTodos}
-									table='completedTodos'
 								/>
 							</li>
 						))}

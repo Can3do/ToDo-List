@@ -3,20 +3,19 @@ import { Dispatch, SetStateAction } from 'react';
 import { format } from 'date-fns';
 import { Cross1Icon, Pencil2Icon } from '@radix-ui/react-icons';
 
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { TodoType, TablesType } from '@/app/page';
+import { TodoType } from '@/app/page';
 
 export const TodoCard = ({
 	todo,
 	setTodos,
-	table,
 }: {
 	todo: TodoType;
 	setTodos: Dispatch<SetStateAction<TodoType[]>>;
-	table: TablesType;
 }) => {
 	const { id, title, description, date, priority } = todo;
 	const [isEditting, setIsEditting] = useState(false);
@@ -69,15 +68,24 @@ export const TodoCard = ({
 
 	return (
 		<div className='flex flex-col p-4 rounded-md border gap-2'>
-			<p className='text-sm font-semibold'>{format(date, 'PPP')}</p>
+			<p
+				className={cn(
+					'text-sm font-semibold',
+					todo.completed === true && 'line-through'
+				)}
+			>
+				{format(date, 'PPP')}
+			</p>
 			<div className='flex gap-4 items-center justify-between'>
 				<div className='flex flex-col gap-2'>
 					<div className='flex gap-4'>
 						<div className='grid place-items-center'>
-							<Checkbox
-								className='rounded-full'
-								onClick={completeTodo}
-							/>
+							{todo.completed === false && (
+								<Checkbox
+									className='rounded-full'
+									onClick={completeTodo}
+								/>
+							)}
 						</div>
 						<div className='flex gap-6 items-center'>
 							<div>
@@ -107,25 +115,29 @@ export const TodoCard = ({
 								) : (
 									<div className='flex flex-col'>
 										<p
-											className={`font-semibold text-lg ${
-												table === 'completedTodos' &&
-												'line-through'
-											}`}
+											className={cn(
+												'font-semibold text-md truncate max-w-[12ch] lg:max-w-[24ch]',
+												todo.completed === true &&
+													'line-through'
+											)}
 										>
 											{title}
 										</p>
 										<p
-											className={`font-normal text-sm ${
-												table === 'completedTodos' &&
-												'line-through'
-											}`}
+											className={cn(
+												'font-normal text-sm truncate max-w-[12ch] lg:max-w-[24ch]',
+												todo.completed === true &&
+													'line-through'
+											)}
 										>
 											{description}
 										</p>
 									</div>
 								)}
 							</div>
-							<Badge variant={priority}>{priority}</Badge>
+							{priority !== '' && (
+								<Badge variant={priority}>{priority}</Badge>
+							)}
 						</div>
 					</div>
 				</div>
@@ -142,7 +154,7 @@ export const TodoCard = ({
 						</>
 					) : (
 						<>
-							{table === 'todos' && (
+							{todo.completed === false && (
 								<Pencil2Icon
 									onClick={() => {
 										setIsEditting(true);
