@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import { z } from 'zod';
+import { useState } from 'react';
+import { SubmitHandler } from 'react-hook-form';
+import { TaskType } from '@/zodSchemas/schemas';
 
-import { TaskSchema, TaskType } from '@/zodSchemas/schemas';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from '@radix-ui/react-icons';
 import {
@@ -11,14 +11,22 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
-import { AddTaskForm } from '@/components/addTaskForm';
+import { TaskForm } from './TaskForm';
+import { UseTasksContext } from './TaskContext';
 
-export const AddTaskDialog = ({
-	setTodos,
-}: {
-	setTodos: Dispatch<SetStateAction<TaskType[]>>;
-}) => {
+export const AddTaskDialog = () => {
 	const [DialogOpen, setDialogOpen] = useState(false);
+	const [, setTasks] = UseTasksContext();
+
+	const createTodo: SubmitHandler<TaskType> = (todoFormFields) => {
+		setTasks((oldTodos) => [
+			...oldTodos,
+			{
+				...todoFormFields,
+			},
+		]);
+	};
+
 	return (
 		<Dialog open={DialogOpen} onOpenChange={setDialogOpen}>
 			<DialogTrigger asChild>
@@ -26,14 +34,11 @@ export const AddTaskDialog = ({
 					<PlusIcon className='w-6 h-6' />
 				</Button>
 			</DialogTrigger>
-			<DialogContent className='flex flex-col gap-6 '>
-				<DialogHeader className=''>
+			<DialogContent>
+				<DialogHeader className='pb-4'>
 					<DialogTitle>Add new task</DialogTitle>
 				</DialogHeader>
-				<AddTaskForm
-					setTodos={setTodos}
-					setDialogOpen={setDialogOpen}
-				/>
+				<TaskForm setDialogOpen={setDialogOpen} onSubmit={createTodo} />
 			</DialogContent>
 		</Dialog>
 	);

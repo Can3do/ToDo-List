@@ -1,13 +1,13 @@
 'use client';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ClockIcon, TextAlignMiddleIcon } from '@radix-ui/react-icons';
 
-import { TaskType } from '@/zodSchemas/schemas';
-import { TaskSchema } from '@/zodSchemas/schemas';
+import { TaskSchema, type TaskType } from '@/zodSchemas/schemas';
 import { cn } from '@/lib/utils';
+import { generateId } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -19,7 +19,6 @@ import {
 	SelectGroup,
 } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form';
-
 import {
 	Popover,
 	PopoverTrigger,
@@ -28,61 +27,42 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { Textarea } from '@/components/ui/textarea';
 import { format } from 'date-fns';
-import { UseTasksContext } from '@/components/TaskContext';
+import { UseTasksContext } from './TaskContext';
 
-export const EditTaskForm = ({
+export const TaskForm = ({
 	setDialogOpen,
-	todo,
+	onSubmit,
+	task,
 }: {
 	setDialogOpen: Dispatch<SetStateAction<boolean>>;
-	todo: z.infer<typeof TaskSchema>;
+	onSubmit: Function;
+	task?: TaskType;
 }) => {
 	const [, setTasks] = UseTasksContext();
+
 	const form = useForm<z.infer<typeof TaskSchema>>({
 		resolver: zodResolver(TaskSchema),
 		defaultValues: {
-			title: todo.title,
-			description: todo.description,
-			priority: todo.priority,
-			date: todo.date,
-			id: todo.id,
-			completed: todo.completed,
+			title: '',
+			description: '',
+			priority: '',
+			date: undefined,
+			completed: false,
+			id: generateId(),
 		},
 	});
 
-	const { id } = todo;
 	const [calendarOpen, setCalendarOpen] = useState(false);
 
-	const saveTodo = (formData: z.infer<typeof TaskSchema>) => {
-		setTasks((oldTodos: TaskType[]) => {
-			let oldTodosCopy = [...oldTodos];
-			const index = oldTodosCopy.findIndex((todo) => todo.id === id);
-			if (index === -1) return oldTodos; // si no encuentra el todo, no hace nada
-			const newTodosArray = oldTodosCopy.map((todo) => {
-				if (todo.id !== id) return todo;
-				return {
-					...todo,
-					...formData,
-				};
-			});
-			return newTodosArray;
-		});
-		setDialogOpen(false);
-	};
-
-	const cancelEdit = () => {
-		setDialogOpen(false);
-	};
-
 	const [isPriorityFieldShowing, setIsPriorityFieldShowing] = useState(false);
-
 	const dateValue = form.watch('date');
 	return (
 		<>
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit((formData) => {
-						saveTodo(formData);
+						onSubmit(formData);
+						form.reset();
 						setDialogOpen(false);
 					})}
 					className='flex flex-col gap-6 rounded-lg'
@@ -97,8 +77,8 @@ export const EditTaskForm = ({
 										<Input
 											placeholder='Title'
 											type='text'
-											{...field}
 											className='border-0 focus-visible:ring-0 text-2xl p-0'
+											{...field}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -248,25 +228,14 @@ export const EditTaskForm = ({
 						</div>
 					</div>
 
-					<div className='flex gap-6'>
-						<Button
-							type='submit'
-							size='lg'
-							variant='green'
-							className='w-full mt-12'
-						>
-							Save
-						</Button>
-						<Button
-							type='button'
-							size='lg'
-							variant='secondary'
-							className='w-full mt-12'
-							onClick={cancelEdit}
-						>
-							Cancel
-						</Button>
-					</div>
+					<Button
+						type='submit'
+						size='lg'
+						variant='default'
+						className='w-full mt-12'
+					>
+						Add Task
+					</Button>
 				</form>
 			</Form>
 		</>

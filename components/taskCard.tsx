@@ -1,21 +1,16 @@
-import { Dispatch, SetStateAction } from 'react';
 import { format } from 'date-fns';
 import { Cross1Icon } from '@radix-ui/react-icons';
 
+import { UseTasksContext } from './TaskContext';
 import { TaskType } from '@/zodSchemas/schemas';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { EditTaskDialog } from '../editTaskDialog';
+import { EditTaskDialog } from './editTaskDialog';
 
-export const TodoCard = ({
-	todo,
-	setTodos,
-}: {
-	todo: TaskType;
-	setTodos: Dispatch<SetStateAction<TaskType[]>>;
-}) => {
-	const { id, title, description, date, priority } = todo;
+export const TaskCard = ({ task }: { task: TaskType }) => {
+	const [todos, setTodos] = UseTasksContext();
+	const { id, title, description, date, priority } = task;
 
 	const deleteToDo = () => {
 		setTodos((oldTodos: TaskType[]) => {
@@ -36,25 +31,30 @@ export const TodoCard = ({
 	};
 
 	return (
-		<div className='flex flex-col p-4 rounded-md border '>
+		<div
+			className={cn(
+				'flex flex-col p-4 rounded-md max-w-[40rem] hover:bg-accent cursor-pointer',
+				task.completed === true && 'text-muted-foreground'
+			)}
+		>
 			{date && (
 				<p
 					className={cn(
 						'text-sm font-semibold pb-2',
-						todo.completed === true && 'line-through'
+						task.completed === true && 'line-through'
 					)}
 				>
 					{format(date, 'PPP')}
 				</p>
 			)}
 
-			<div className='flex gap-4 items-center justify-between'>
+			<div className='flex items-center justify-between'>
 				<div className='flex flex-col gap-2'>
-					<div className='flex gap-4'>
+					<div className='flex '>
 						<div className='grid place-items-center'>
-							{todo.completed === false && (
+							{task.completed === false && (
 								<Checkbox
-									className='rounded-full'
+									className='rounded-full w-5 h-5 mr-4'
 									onClick={completeTodo}
 								/>
 							)}
@@ -64,8 +64,8 @@ export const TodoCard = ({
 								<div className='flex flex-col'>
 									<p
 										className={cn(
-											'font-semibold text-md truncate max-w-[12ch] lg:max-w-[24ch]',
-											todo.completed === true &&
+											'font-semibold text-lg truncate max-w-[12ch] lg:max-w-[24ch]',
+											task.completed === true &&
 												'line-through'
 										)}
 									>
@@ -74,7 +74,7 @@ export const TodoCard = ({
 									<p
 										className={cn(
 											'font-normal text-sm truncate max-w-[12ch] lg:max-w-[24ch]',
-											todo.completed === true &&
+											task.completed === true &&
 												'line-through'
 										)}
 									>
@@ -90,9 +90,7 @@ export const TodoCard = ({
 				</div>
 
 				<div className='flex gap-4 items-center'>
-					{todo.completed === false && (
-						<EditTaskDialog todo={todo} setTodos={setTodos} />
-					)}
+					{task.completed === false && <EditTaskDialog task={task} />}
 
 					<button>
 						<Cross1Icon onClick={deleteToDo} className=' w-5 h-5' />

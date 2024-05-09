@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import {
 	Dialog,
 	DialogContent,
@@ -10,13 +10,7 @@ import { EditTaskForm } from '@/components/editTaskForm';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import { TaskType } from '@/zodSchemas/schemas';
 
-export const EditTaskDialog = ({
-	todo,
-	setTodos,
-}: {
-	todo: TaskType;
-	setTodos: Dispatch<SetStateAction<TaskType[]>>;
-}) => {
+export const EditTaskDialog = ({ task }: { task: TaskType }) => {
 	const [DialogOpen, setDialogOpen] = useState(false);
 
 	return (
@@ -26,15 +20,11 @@ export const EditTaskDialog = ({
 					<Pencil2Icon className='w-5 h-5' />
 				</button>
 			</DialogTrigger>
-			<DialogContent className='flex flex-col gap-6 '>
-				<DialogHeader className=''>
+			<DialogContent>
+				<DialogHeader className='pb-4'>
 					<DialogTitle>Edit task</DialogTitle>
 				</DialogHeader>
-				<EditTaskForm
-					setTodos={setTodos}
-					setDialogOpen={setDialogOpen}
-					todo={todo}
-				/>
+				<EditTaskForm setDialogOpen={setDialogOpen} todo={task} />
 			</DialogContent>
 		</Dialog>
 	);
