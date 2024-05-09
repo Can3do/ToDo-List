@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { TodoType } from '@/app/page';
+import { EditTaskDialog } from '../editTaskDialog';
 
 export const TodoCard = ({
 	todo,
@@ -18,8 +19,6 @@ export const TodoCard = ({
 	setTodos: Dispatch<SetStateAction<TodoType[]>>;
 }) => {
 	const { id, title, description, date, priority } = todo;
-	const [isEditting, setIsEditting] = useState(false);
-	const [currentEdittingValue, setCurrentEdittingValue] = useState(todo);
 
 	const deleteToDo = () => {
 		setTodos((oldTodos: TodoType[]) => {
@@ -29,33 +28,6 @@ export const TodoCard = ({
 			oldTodosCopy.splice(indexToDelete, 1);
 			return oldTodosCopy;
 		});
-	};
-
-	const modifyTodosList = (oldTodos: TodoType[]) => {
-		let oldTodosCopy = [...oldTodos];
-		const index = oldTodosCopy.findIndex((todo) => todo.id === id);
-		if (index === -1) return oldTodos;
-		const newTodosArray = oldTodosCopy.map((todo) => {
-			if (todo.id !== id) return todo;
-			return {
-				...todo,
-				title: currentEdittingValue.title,
-				description: currentEdittingValue.description,
-			};
-		});
-		return newTodosArray;
-	};
-
-	const saveEdit = () => {
-		setTodos((oldTodos: TodoType[]) => {
-			return modifyTodosList(oldTodos);
-		});
-		setIsEditting(false);
-	};
-
-	const cancelEdit = () => {
-		setCurrentEdittingValue(todo);
-		setIsEditting(false);
 	};
 
 	const completeTodo = () => {
@@ -89,51 +61,26 @@ export const TodoCard = ({
 						</div>
 						<div className='flex gap-6 items-center'>
 							<div>
-								{isEditting ? (
-									<>
-										<Input
-											value={currentEdittingValue.title}
-											onChange={(e) =>
-												setCurrentEdittingValue({
-													...currentEdittingValue,
-													title: e.target.value,
-												})
-											}
-										></Input>
-										<Input
-											value={
-												currentEdittingValue.description
-											}
-											onChange={(e) =>
-												setCurrentEdittingValue({
-													...currentEdittingValue,
-													description: e.target.value,
-												})
-											}
-										></Input>
-									</>
-								) : (
-									<div className='flex flex-col'>
-										<p
-											className={cn(
-												'font-semibold text-md truncate max-w-[12ch] lg:max-w-[24ch]',
-												todo.completed === true &&
-													'line-through'
-											)}
-										>
-											{title}
-										</p>
-										<p
-											className={cn(
-												'font-normal text-sm truncate max-w-[12ch] lg:max-w-[24ch]',
-												todo.completed === true &&
-													'line-through'
-											)}
-										>
-											{description}
-										</p>
-									</div>
-								)}
+								<div className='flex flex-col'>
+									<p
+										className={cn(
+											'font-semibold text-md truncate max-w-[12ch] lg:max-w-[24ch]',
+											todo.completed === true &&
+												'line-through'
+										)}
+									>
+										{title}
+									</p>
+									<p
+										className={cn(
+											'font-normal text-sm truncate max-w-[12ch] lg:max-w-[24ch]',
+											todo.completed === true &&
+												'line-through'
+										)}
+									>
+										{description}
+									</p>
+								</div>
 							</div>
 							{priority !== '' && (
 								<Badge variant={priority}>{priority}</Badge>
@@ -143,32 +90,13 @@ export const TodoCard = ({
 				</div>
 
 				<div className='flex gap-4 items-center'>
-					{isEditting ? (
-						<>
-							<Button onClick={saveEdit} variant='green'>
-								Save
-							</Button>
-							<Button onClick={cancelEdit} variant='secondary'>
-								Cancel
-							</Button>
-						</>
-					) : (
-						<>
-							{todo.completed === false && (
-								<Pencil2Icon
-									onClick={() => {
-										setIsEditting(true);
-									}}
-									className=' w-5 h-5 cursor-pointer'
-								/>
-							)}
-
-							<Cross1Icon
-								onClick={deleteToDo}
-								className=' w-5 h-5 cursor-pointer'
-							/>
-						</>
+					{todo.completed === false && (
+						<EditTaskDialog todo={todo} setTodos={setTodos} />
 					)}
+
+					<button>
+						<Cross1Icon onClick={deleteToDo} className=' w-5 h-5' />
+					</button>
 				</div>
 			</div>
 		</div>

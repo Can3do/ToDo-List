@@ -27,6 +27,12 @@ export default function Home() {
 	const uncompletedTodos = todos.filter((todo) => todo.completed === false);
 	const completedTodos = todos.filter((todo) => todo.completed === true);
 
+	const deleteAllCompletedTodos = () => {
+		setTodos((oldTodos) =>
+			oldTodos.filter((todo) => todo.completed === false)
+		);
+	};
+
 	useEffect(() => {
 		localStorage.setItem('todos', JSON.stringify(todos));
 	}, [todos]);
@@ -61,13 +67,7 @@ export default function Home() {
 				<div className='flex items-center gap-4 justify-between'>
 					<p>{`Completed (${completedTodos.length})`}</p>
 					<Button
-						onClick={() => {
-							setTodos((oldTodos) =>
-								oldTodos.filter(
-									(todo) => todo.completed === false
-								)
-							);
-						}}
+						onClick={deleteAllCompletedTodos}
 						variant={'outline'}
 					>
 						Clear all
