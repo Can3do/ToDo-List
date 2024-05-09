@@ -14,15 +14,33 @@ export type TodoType = {
 	completed: boolean;
 };
 
+type TodoTypeOnLocalStorage = {
+	id: string;
+	title: string;
+	description: string;
+	date: string;
+	priority: 'high' | 'medium' | 'low' | '';
+	completed: string;
+};
+
 export default function Home() {
-	const [todos, setTodos] = useState<TodoType[]>(
-		(function () {
-			if (typeof localStorage !== 'undefined')
-				return JSON.parse(
-					window.localStorage.getItem('todos') as string
-				);
-		})() || []
-	);
+	const getTasksFromLocalStorage = () => {
+		if (localStorage && localStorage.getItem('todos')) {
+			const parsedLocalStorage = JSON.parse(
+				window.localStorage.getItem('todos') as string
+			);
+			const dateParsedLocalStorage = parsedLocalStorage.map(
+				(todo: TodoTypeOnLocalStorage) => ({
+					...todo,
+					date: new Date(todo.date),
+				})
+			);
+			return dateParsedLocalStorage;
+		}
+		return [];
+	};
+
+	const [todos, setTodos] = useState<TodoType[]>(getTasksFromLocalStorage());
 
 	const uncompletedTodos = todos.filter((todo) => todo.completed === false);
 	const completedTodos = todos.filter((todo) => todo.completed === true);
