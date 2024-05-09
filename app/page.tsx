@@ -38,7 +38,9 @@ export default function Home() {
 			</h1>
 
 			{/* <AddTaskForm setTodos={setTodos} /> */}
-			<AddTaskDialog setTodos={setTodos} />
+			<div>
+				<AddTaskDialog setTodos={setTodos} />
+			</div>
 
 			<div className='flex flex-col gap-6 py-12'>
 				<p>{`Your tasks (${uncompletedTodos.length})`}</p>

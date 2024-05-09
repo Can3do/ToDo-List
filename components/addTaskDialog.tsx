@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { type TodoType } from '@/app/page';
 import { Button } from '@/components/ui/button';
+import { PlusIcon } from '@radix-ui/react-icons';
 import {
 	Dialog,
 	DialogContent,
@@ -21,9 +22,9 @@ export const AddTaskDialog = ({
 			<DialogTrigger asChild>
 				<Button
 					variant='outline'
-					className='rounded-full w-[40px] h-[40px]'
+					className='rounded-full aspect-square flex p-0'
 				>
-					+
+					<PlusIcon className='w-5 h-5' />
 				</Button>
 			</DialogTrigger>
 			<DialogContent className='flex flex-col gap-6 '>
