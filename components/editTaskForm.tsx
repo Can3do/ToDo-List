@@ -1,6 +1,6 @@
 'use client';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -9,9 +9,9 @@ import {
 	TextAlignMiddleIcon,
 } from '@radix-ui/react-icons';
 
+import { TaskType } from '@/zodSchemas/schemas';
+import { TaskSchema } from '@/zodSchemas/schemas';
 import { cn } from '@/lib/utils';
-import { type TodoType } from '@/app/page';
-import { generateId } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -38,43 +38,34 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Textarea } from '@/components/ui/textarea';
-
-const editTasksFormSchema = z.object({
-	title: z
-		.string()
-		.min(1, 'The title is required')
-		.max(48, 'The title must be shorter than 48 characters.'),
-	description: z
-		.string()
-		.max(512, 'The description must be shorter than 512 characters'),
-	priority: z.enum(['low', 'medium', 'high', '']),
-	date: z.date(),
-});
+import { format } from 'date-fns';
 
 export const EditTaskForm = ({
 	setTodos,
 	setDialogOpen,
 	todo,
 }: {
-	setTodos: Dispatch<SetStateAction<TodoType[]>>;
+	setTodos: Dispatch<SetStateAction<TaskType[]>>;
 	setDialogOpen: Dispatch<SetStateAction<boolean>>;
-	todo: TodoType;
+	todo: z.infer<typeof TaskSchema>;
 }) => {
-	const form = useForm<z.infer<typeof editTasksFormSchema>>({
-		resolver: zodResolver(editTasksFormSchema),
+	const form = useForm<z.infer<typeof TaskSchema>>({
+		resolver: zodResolver(TaskSchema),
 		defaultValues: {
 			title: todo.title,
 			description: todo.description,
 			priority: todo.priority,
 			date: todo.date,
+			id: todo.id,
+			completed: todo.completed,
 		},
 	});
 
 	const { id } = todo;
 	const [calendarOpen, setCalendarOpen] = useState(false);
 
-	const saveTodo = (formData: z.infer<typeof editTasksFormSchema>) => {
-		setTodos((oldTodos: TodoType[]) => {
+	const saveTodo = (formData: z.infer<typeof TaskSchema>) => {
+		setTodos((oldTodos: TaskType[]) => {
 			let oldTodosCopy = [...oldTodos];
 			const index = oldTodosCopy.findIndex((todo) => todo.id === id);
 			if (index === -1) return oldTodos; // si no encuentra el todo, no hace nada
@@ -99,6 +90,7 @@ export const EditTaskForm = ({
 	);
 	const [isPriorityFieldShowing, setIsPriorityFieldShowing] = useState(false);
 
+	const dateValue = form.watch('date');
 	return (
 		<>
 			<Form {...form}>
@@ -115,12 +107,12 @@ export const EditTaskForm = ({
 							name='title'
 							render={({ field }) => (
 								<FormItem className='flex flex-col w-full'>
-									<FormLabel>Title</FormLabel>
 									<FormControl>
 										<Input
 											placeholder='Title'
 											type='text'
 											{...field}
+											className='border-0 focus-visible:ring-0 text-2xl p-0'
 										/>
 									</FormControl>
 									<FormMessage />
@@ -133,10 +125,10 @@ export const EditTaskForm = ({
 								name='description'
 								render={({ field }) => (
 									<FormItem className='flex flex-col w-full'>
-										<FormLabel>Description</FormLabel>
 										<FormControl>
 											<Textarea
-												placeholder='Description'
+												placeholder='Details'
+												className='border-0 focus-visible:ring-0 text-lg p-0'
 												{...field}
 											/>
 										</FormControl>
@@ -188,6 +180,20 @@ export const EditTaskForm = ({
 							/>
 						)}
 					</div>
+					{dateValue !== undefined && (
+						<div className='flex'>
+							<Button
+								className='rounded-full text-'
+								variant='outline'
+								type='button'
+								onClick={() => {
+									setCalendarOpen(!calendarOpen);
+								}}
+							>
+								{format(dateValue, 'PPP')}
+							</Button>
+						</div>
+					)}
 
 					<div className='flex gap-2'>
 						<Button
@@ -212,6 +218,7 @@ export const EditTaskForm = ({
 						>
 							<TextAlignMiddleIcon className='w-5 h-5' />
 						</Button>
+
 						<FormField
 							control={form.control}
 							name='date'

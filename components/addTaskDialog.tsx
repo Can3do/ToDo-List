@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { type TodoType } from '@/app/page';
+import { z } from 'zod';
+
+import { TaskSchema, TaskType } from '@/zodSchemas/schemas';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from '@radix-ui/react-icons';
 import {
@@ -14,7 +16,7 @@ import { AddTaskForm } from '@/components/addTaskForm';
 export const AddTaskDialog = ({
 	setTodos,
 }: {
-	setTodos: Dispatch<SetStateAction<TodoType[]>>;
+	setTodos: Dispatch<SetStateAction<TaskType[]>>;
 }) => {
 	const [DialogOpen, setDialogOpen] = useState(false);
 	return (

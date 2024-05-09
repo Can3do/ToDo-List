@@ -1,7 +1,4 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-
-import { type TodoType } from '@/app/page';
-import { Button } from '@/components/ui/button';
 import {
 	Dialog,
 	DialogContent,
@@ -11,13 +8,14 @@ import {
 } from '@/components/ui/dialog';
 import { EditTaskForm } from '@/components/editTaskForm';
 import { Pencil2Icon } from '@radix-ui/react-icons';
+import { TaskType } from '@/zodSchemas/schemas';
 
 export const EditTaskDialog = ({
 	todo,
 	setTodos,
 }: {
-	todo: TodoType;
-	setTodos: Dispatch<SetStateAction<TodoType[]>>;
+	todo: TaskType;
+	setTodos: Dispatch<SetStateAction<TaskType[]>>;
 }) => {
 	const [DialogOpen, setDialogOpen] = useState(false);
 

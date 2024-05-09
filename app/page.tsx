@@ -1,25 +1,17 @@
 'use client';
 import { useEffect, useState } from 'react';
-
 import { motion, LayoutGroup, AnimatePresence } from 'framer-motion';
+
+import { TaskType } from '@/zodSchemas/schemas';
 import { TodoCard } from '@/components/todoCard/TodoCard';
 import { Button } from '@/components/ui/button';
 import { AddTaskDialog } from '@/components/addTaskDialog';
-
-export type TodoType = {
-	id: string;
-	title: string;
-	description: string;
-	date: Date;
-	priority: 'high' | 'medium' | 'low' | '';
-	completed: boolean;
-};
 
 type TodoTypeOnLocalStorage = {
 	id: string;
 	title: string;
 	description: string;
-	date: string;
+	date?: string;
 	priority: 'high' | 'medium' | 'low' | '';
 	completed: string;
 };
@@ -34,17 +26,20 @@ export default function Home() {
 				window.localStorage.getItem('todos') as string
 			);
 			const dateParsedLocalStorage = parsedLocalStorage.map(
-				(todo: TodoTypeOnLocalStorage) => ({
-					...todo,
-					date: new Date(todo.date),
-				})
+				(todo: TodoTypeOnLocalStorage) => {
+					const TransitionObject: any = { ...todo };
+					if (todo.date !== undefined) {
+						TransitionObject.date = new Date(todo.date);
+					}
+					return TransitionObject;
+				}
 			);
 			return dateParsedLocalStorage;
 		}
 		return [];
 	};
 
-	const [todos, setTodos] = useState<TodoType[]>(getTasksFromLocalStorage());
+	const [todos, setTodos] = useState<TaskType[]>(getTasksFromLocalStorage());
 
 	const uncompletedTodos = todos.filter((todo) => todo.completed === false);
 	const completedTodos = todos.filter((todo) => todo.completed === true);
@@ -65,7 +60,6 @@ export default function Home() {
 				Just another todo app
 			</h1>
 
-			{/* <AddTaskForm setTodos={setTodos} /> */}
 			<div>
 				<AddTaskDialog setTodos={setTodos} />
 			</div>

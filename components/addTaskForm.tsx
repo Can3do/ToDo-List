@@ -9,8 +9,8 @@ import {
 	TextAlignMiddleIcon,
 } from '@radix-ui/react-icons';
 
+import { TaskSchema, type TaskType } from '@/zodSchemas/schemas';
 import { cn } from '@/lib/utils';
-import { type TodoType } from '@/app/page';
 import { generateId } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -37,56 +37,46 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Textarea } from '@/components/ui/textarea';
-
-const addTasksFormSchema = z.object({
-	title: z
-		.string()
-		.min(1, 'The title is required')
-		.max(48, 'The title must be shorter than 48 characters.'),
-	description: z
-		.string()
-		.max(512, 'The description must be shorter than 512 characters'),
-	priority: z.enum(['low', 'medium', 'high', '']),
-	date: z.date(),
-});
+import { format } from 'date-fns';
 
 export const AddTaskForm = ({
 	setTodos,
 	setDialogOpen,
 }: {
-	setTodos: Dispatch<SetStateAction<TodoType[]>>;
+	setTodos: Dispatch<SetStateAction<TaskType[]>>;
 	setDialogOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-	const form = useForm<z.infer<typeof addTasksFormSchema>>({
-		resolver: zodResolver(addTasksFormSchema),
+	const form = useForm<z.infer<typeof TaskSchema>>({
+		resolver: zodResolver(TaskSchema),
 		defaultValues: {
 			title: '',
 			description: '',
 			priority: 'low',
-			date: new Date(),
+			date: undefined,
+			completed: false,
+			id: generateId(),
 		},
 	});
 
 	const [calendarOpen, setCalendarOpen] = useState(false);
 
-	const createTodo: SubmitHandler<z.infer<typeof addTasksFormSchema>> = (
+	const createTodo: SubmitHandler<z.infer<typeof TaskSchema>> = (
 		todoFormFields
 	) => {
 		setTodos((oldTodos) => [
 			...oldTodos,
 			{
 				...todoFormFields,
-				id: generateId(),
-				completed: false,
 			},
 		]);
+
 		form.reset();
 	};
 
 	const [isDescriptionFieldShowing, setIsDescriptionFieldShowing] =
 		useState(false);
 	const [isPriorityFieldShowing, setIsPriorityFieldShowing] = useState(false);
-
+	const dateValue = form.watch('date');
 	return (
 		<>
 			<Form {...form}>
@@ -103,11 +93,11 @@ export const AddTaskForm = ({
 							name='title'
 							render={({ field }) => (
 								<FormItem className='flex flex-col w-full'>
-									<FormLabel>Title</FormLabel>
 									<FormControl>
 										<Input
 											placeholder='Title'
 											type='text'
+											className='border-0 focus-visible:ring-0 text-2xl p-0'
 											{...field}
 										/>
 									</FormControl>
@@ -121,10 +111,10 @@ export const AddTaskForm = ({
 								name='description'
 								render={({ field }) => (
 									<FormItem className='flex flex-col w-full'>
-										<FormLabel>Description</FormLabel>
 										<FormControl>
 											<Textarea
-												placeholder='Description'
+												placeholder='Details'
+												className='border-0 focus-visible:ring-0 text-lg p-0'
 												{...field}
 											/>
 										</FormControl>
@@ -176,6 +166,21 @@ export const AddTaskForm = ({
 							/>
 						)}
 					</div>
+
+					{dateValue !== undefined && (
+						<div className='flex'>
+							<Button
+								className='rounded-full text-'
+								variant='outline'
+								type='button'
+								onClick={() => {
+									setCalendarOpen(!calendarOpen);
+								}}
+							>
+								{format(dateValue, 'PPP')}
+							</Button>
+						</div>
+					)}
 
 					<div className='flex gap-2'>
 						<Button
