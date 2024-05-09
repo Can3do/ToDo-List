@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+import { motion, LayoutGroup, AnimatePresence } from 'framer-motion';
 import { TodoCard } from '@/components/todoCard/TodoCard';
 import { Button } from '@/components/ui/button';
 import { AddTaskDialog } from '@/components/addTaskDialog';
@@ -25,7 +26,10 @@ type TodoTypeOnLocalStorage = {
 
 export default function Home() {
 	const getTasksFromLocalStorage = () => {
-		if (localStorage && localStorage.getItem('todos')) {
+		if (
+			typeof localStorage !== 'undefined' &&
+			localStorage.getItem('todos') !== null
+		) {
 			const parsedLocalStorage = JSON.parse(
 				window.localStorage.getItem('todos') as string
 			);
@@ -69,13 +73,30 @@ export default function Home() {
 			<div className='flex flex-col gap-6 py-12'>
 				<p>{`Your tasks (${uncompletedTodos.length})`}</p>
 				{uncompletedTodos.length > 0 ? (
-					<ul className='flex flex-col gap-5'>
-						{uncompletedTodos.map((todo) => (
-							<li key={todo.id}>
-								<TodoCard todo={todo} setTodos={setTodos} />
-							</li>
-						))}
-					</ul>
+					<motion.ul className='flex flex-col gap-4'>
+						<LayoutGroup>
+							<AnimatePresence>
+								{uncompletedTodos.map((todo) => (
+									<motion.li
+										key={todo.id}
+										layout
+										initial={{ opacity: 0 }}
+										animate={{ opacity: 1 }}
+										exit={{ opacity: 0 }}
+										transition={{
+											duration: 0.2,
+											ease: 'easeOut',
+										}}
+									>
+										<TodoCard
+											todo={todo}
+											setTodos={setTodos}
+										/>
+									</motion.li>
+								))}
+							</AnimatePresence>
+						</LayoutGroup>
+					</motion.ul>
 				) : (
 					<p className='text-muted-foreground'>You have no tasks</p>
 				)}
@@ -93,16 +114,30 @@ export default function Home() {
 				</div>
 
 				{
-					<ul className='flex flex-col gap-4'>
-						{completedTodos.map((completedTodo) => (
-							<li key={completedTodo.id}>
-								<TodoCard
-									todo={completedTodo}
-									setTodos={setTodos}
-								/>
-							</li>
-						))}
-					</ul>
+					<motion.ul className='flex flex-col gap-4'>
+						<LayoutGroup>
+							<AnimatePresence>
+								{completedTodos.map((todo) => (
+									<motion.li
+										key={todo.id}
+										layout
+										initial={{ opacity: 0 }}
+										animate={{ opacity: 1 }}
+										exit={{ opacity: 0 }}
+										transition={{
+											duration: 0.2,
+											ease: 'easeOut',
+										}}
+									>
+										<TodoCard
+											todo={todo}
+											setTodos={setTodos}
+										/>
+									</motion.li>
+								))}
+							</AnimatePresence>
+						</LayoutGroup>
+					</motion.ul>
 				}
 			</div>
 		</main>
