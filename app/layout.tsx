@@ -4,6 +4,7 @@ import './globals.css';
 
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const font = DM_Sans({ subsets: ['latin'] });
 
@@ -20,9 +21,16 @@ export default function RootLayout({
 	return (
 		<html lang='en' className='dark'>
 			<body className={`${font.className} flex flex-col items-center`}>
-				<Header />
-				{children}
-				<Footer />
+				<ThemeProvider
+					attribute='class'
+					defaultTheme='dark'
+					enableSystem
+					disableTransitionOnChange
+				>
+					<Header />
+					{children}
+					<Footer />
+				</ThemeProvider>
 			</body>
 		</html>
 	);

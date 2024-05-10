@@ -14,7 +14,7 @@ import {
 import { TaskForm } from './TaskForm';
 import { UseTasksContext } from './TaskContext';
 
-export const AddTaskDialog = () => {
+export const AddTaskDialog = ({ children }: { children: JSX.Element }) => {
 	const [DialogOpen, setDialogOpen] = useState(false);
 	const [, setTasks] = UseTasksContext();
 
@@ -29,11 +29,7 @@ export const AddTaskDialog = () => {
 
 	return (
 		<Dialog open={DialogOpen} onOpenChange={setDialogOpen}>
-			<DialogTrigger asChild>
-				<Button variant='icon' className='aspect-square p-0 w-14 h-14'>
-					<PlusIcon className='w-6 h-6' />
-				</Button>
-			</DialogTrigger>
+			<DialogTrigger asChild>{children}</DialogTrigger>
 			<DialogContent>
 				<DialogHeader className='pb-4'>
 					<DialogTitle>Add new task</DialogTitle>

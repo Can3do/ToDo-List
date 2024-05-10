@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { EditTaskDialog } from './editTaskDialog';
 
 export const TaskCard = ({ task }: { task: TaskType }) => {
-	const [todos, setTodos] = UseTasksContext();
+	const [, setTodos] = UseTasksContext();
 	const { id, title, description, date, priority } = task;
 
 	const deleteToDo = () => {
@@ -33,7 +33,7 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 	return (
 		<div
 			className={cn(
-				'flex flex-col p-4 rounded-md max-w-[40rem] hover:bg-accent cursor-pointer',
+				'flex flex-col p-4 rounded-md max-w-[40rem] hover:bg-accent cursor-pointer border',
 				task.completed === true && 'text-muted-foreground'
 			)}
 		>

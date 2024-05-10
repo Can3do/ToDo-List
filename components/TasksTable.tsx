@@ -6,7 +6,7 @@ import { TaskCard } from './taskCard';
 export const TasksTable = ({ tableTitle }: { tableTitle: string }) => {
 	const [tasks] = UseTasksContext();
 	return (
-		<div className='flex flex-col gap-6 py-12 min-h-64'>
+		<div className='flex flex-col gap-6 min-h-64'>
 			<p>{`${tableTitle} (${tasks.length})`}</p>
 			<motion.ul className='flex flex-col gap-4'>
 				<LayoutGroup>
