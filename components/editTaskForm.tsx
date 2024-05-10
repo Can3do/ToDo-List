@@ -98,7 +98,7 @@ export const EditTaskForm = ({
 											placeholder='Title'
 											type='text'
 											{...field}
-											className='border-0 focus-visible:ring-0 text-2xl p-0'
+											className='border-0 focus-visible:ring-0 text-2xl p-0 shadow-none'
 										/>
 									</FormControl>
 									<FormMessage />
@@ -114,7 +114,7 @@ export const EditTaskForm = ({
 									<FormControl>
 										<Textarea
 											placeholder='Details'
-											className='border-0 focus-visible:ring-0 text-lg p-0'
+											className='shadow-none border-0 focus-visible:ring-0 text-lg p-0'
 											{...field}
 										/>
 									</FormControl>

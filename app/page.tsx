@@ -28,16 +28,16 @@ export default function Home() {
 	return (
 		<>
 			<main className='flex justift-center flex-col box-border w-full max-w-7xl  min-h-[100vh]'>
-				<div className='fixed w-full bg-background bottom-0 lg:hidden grid place-items-center border-t  p-6'>
+				<div className='fixed right-0 bottom-0 lg:hidden grid place-items-center p-6'>
 					<TasksContext.Provider value={[uncompletedTodos, setTodos]}>
 						<AddTaskDialog>
 							<Button
 								variant='default'
-								className='text-lg flex gap-4 p-8 w-full'
+								className='rounded-full p-0 h-12 w-12'
 								size='lg'
 							>
 								<PlusIcon className='w-6 h-6' />
-								<p>Add new task</p>
+								
 							</Button>
 						</AddTaskDialog>
 					</TasksContext.Provider>

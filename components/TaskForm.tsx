@@ -77,7 +77,7 @@ export const TaskForm = ({
 										<Input
 											placeholder='Title'
 											type='text'
-											className='border-0 focus-visible:ring-0 text-2xl p-0'
+											className='shadow-none border-0 focus-visible:ring-0 text-2xl p-0'
 											{...field}
 										/>
 									</FormControl>
@@ -94,7 +94,7 @@ export const TaskForm = ({
 									<FormControl>
 										<Textarea
 											placeholder='Details'
-											className='border-0 focus-visible:ring-0 text-lg p-0'
+											className='shadow-none border-0 focus-visible:ring-0 text-lg p-0'
 											{...field}
 										/>
 									</FormControl>
