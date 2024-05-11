@@ -6,7 +6,6 @@ import { TaskType } from '@/zodSchemas/schemas';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { EditTaskDialog } from './editTaskDialog';
 
 export const TaskCard = ({ task }: { task: TaskType }) => {
 	const [, setTodos] = UseTasksContext();
@@ -33,7 +32,7 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 	return (
 		<div
 			className={cn(
-				'flex flex-col p-4 rounded-md max-w-[40rem] hover:bg-accent cursor-pointer border',
+				'flex flex-col p-4 rounded-md  hover:bg-accent cursor-pointer border',
 				task.completed === true && 'text-muted-foreground'
 			)}
 		>
@@ -55,7 +54,10 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 							{task.completed === false && (
 								<Checkbox
 									className='rounded-full w-5 h-5 mr-4'
-									onClick={completeTodo}
+									onClick={(e) => {
+										e.stopPropagation();
+										completeTodo();
+									}}
 								/>
 							)}
 						</div>
@@ -90,10 +92,13 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 				</div>
 
 				<div className='flex gap-4 items-center'>
-					{task.completed === false && <EditTaskDialog task={task} />}
-
-					<button>
-						<Cross1Icon onClick={deleteToDo} className=' w-5 h-5' />
+					<button
+						onClick={(e) => {
+							e.stopPropagation();
+							deleteToDo();
+						}}
+					>
+						<Cross1Icon className=' w-5 h-5' />
 					</button>
 				</div>
 			</div>

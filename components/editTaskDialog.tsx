@@ -7,8 +7,9 @@ import {
 	DialogTrigger,
 } from '@/components/ui/dialog';
 import { EditTaskForm } from '@/components/editTaskForm';
-import { Pencil2Icon } from '@radix-ui/react-icons';
+
 import { TaskType } from '@/zodSchemas/schemas';
+import { TaskCard } from './taskCard';
 
 export const EditTaskDialog = ({ task }: { task: TaskType }) => {
 	const [DialogOpen, setDialogOpen] = useState(false);
@@ -16,9 +17,9 @@ export const EditTaskDialog = ({ task }: { task: TaskType }) => {
 	return (
 		<Dialog open={DialogOpen} onOpenChange={setDialogOpen}>
 			<DialogTrigger asChild>
-				<button>
-					<Pencil2Icon className='w-5 h-5' />
-				</button>
+				<div className='max-w-[40rem]'>
+					<TaskCard task={task} />
+				</div>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader className='pb-4'>

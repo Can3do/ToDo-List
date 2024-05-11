@@ -1,7 +1,7 @@
 import { motion, LayoutGroup, AnimatePresence } from 'framer-motion';
 
 import { UseTasksContext } from './TaskContext';
-import { TaskCard } from './taskCard';
+import { EditTaskDialog } from './editTaskDialog';
 
 export const TasksTable = ({ tableTitle }: { tableTitle: string }) => {
 	const [tasks] = UseTasksContext();
@@ -24,7 +24,7 @@ export const TasksTable = ({ tableTitle }: { tableTitle: string }) => {
 										ease: 'easeOut',
 									}}
 								>
-									<TaskCard task={task} />
+									<EditTaskDialog task={task} />
 								</motion.li>
 							))}
 					</AnimatePresence>

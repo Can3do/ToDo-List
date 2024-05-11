@@ -37,7 +37,6 @@ export const EditTaskForm = ({
 	setDialogOpen: Dispatch<SetStateAction<boolean>>;
 	todo: z.infer<typeof TaskSchema>;
 }) => {
-	const [, setTasks] = UseTasksContext();
 	const form = useForm<z.infer<typeof TaskSchema>>({
 		resolver: zodResolver(TaskSchema),
 		defaultValues: {
@@ -49,9 +48,13 @@ export const EditTaskForm = ({
 			completed: todo.completed,
 		},
 	});
-
+	const [, setTasks] = UseTasksContext();
 	const { id } = todo;
 	const [calendarOpen, setCalendarOpen] = useState(false);
+	const [isPriorityFieldShowing, setIsPriorityFieldShowing] = useState(
+		!!todo.priority
+	);
+	const dateValue = form.watch('date');
 
 	const saveTodo = (formData: z.infer<typeof TaskSchema>) => {
 		setTasks((oldTodos: TaskType[]) => {
@@ -74,9 +77,6 @@ export const EditTaskForm = ({
 		setDialogOpen(false);
 	};
 
-	const [isPriorityFieldShowing, setIsPriorityFieldShowing] = useState(false);
-
-	const dateValue = form.watch('date');
 	return (
 		<>
 			<Form {...form}>
