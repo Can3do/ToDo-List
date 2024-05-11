@@ -32,57 +32,50 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 	return (
 		<div
 			className={cn(
-				'flex flex-col p-4 rounded-md  hover:bg-accent cursor-pointer border',
-				task.completed === true && 'text-muted-foreground'
+				'flex flex-col rounded-md  hover:bg-accent cursor-pointer border gap-4 py-4',
+				task.completed === true && 'text-muted-foreground line-through'
 			)}
 		>
 			{date && (
-				<p
-					className={cn(
-						'text-sm font-semibold pb-2',
-						task.completed === true && 'line-through'
-					)}
-				>
+				<p className='text-sm font-semibold px-4'>
 					{format(date, 'PPP')}
 				</p>
 			)}
 
 			<div className='flex items-center justify-between'>
-				<div className='flex flex-col gap-2'>
-					<div className='flex '>
-						<div className='grid place-items-center'>
-							<Checkbox
-								checked={completed}
-								className='rounded-full w-5 h-5 mr-4 data-[state=checked]:opacity-50'
-								onClick={(e) => {
-									e.stopPropagation();
-									toggleCompleted();
-								}}
-							/>
+				<div className='flex items-center'>
+					<div
+						className='grid place-items-center p-4 '
+						onClick={(e) => {
+							e.stopPropagation();
+							toggleCompleted();
+						}}
+					>
+						<Checkbox
+							checked={completed}
+							className='rounded-full w-5 h-5 data-[state=checked]:opacity-50'
+						/>
+					</div>
+					<div className='flex gap-8 items-center'>
+						<div className='flex flex-col'>
+							<p
+								className={cn(
+									'font-semibold text-lg truncate max-w-[12ch] lg:max-w-[24ch]',
+									task.completed === true && 'line-through'
+								)}
+							>
+								{title}
+							</p>
+							<p
+								className={cn(
+									'font-normal text-sm truncate max-w-[12ch] lg:max-w-[24ch]',
+									task.completed === true && 'line-through'
+								)}
+							>
+								{description}
+							</p>
 						</div>
-						<div className='flex gap-6 items-center'>
-							<div>
-								<div className='flex flex-col'>
-									<p
-										className={cn(
-											'font-semibold text-lg truncate max-w-[12ch] lg:max-w-[24ch]',
-											task.completed === true &&
-												'line-through'
-										)}
-									>
-										{title}
-									</p>
-									<p
-										className={cn(
-											'font-normal text-sm truncate max-w-[12ch] lg:max-w-[24ch]',
-											task.completed === true &&
-												'line-through'
-										)}
-									>
-										{description}
-									</p>
-								</div>
-							</div>
+						<div className=' flex gap-4'>
 							{priority !== '' && (
 								<Badge variant={priority}>{priority}</Badge>
 							)}
@@ -90,16 +83,15 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 					</div>
 				</div>
 
-				<div className='flex gap-4 items-center'>
-					<button
-						onClick={(e) => {
-							e.stopPropagation();
-							deleteToDo();
-						}}
-					>
-						<Cross1Icon className=' w-5 h-5' />
-					</button>
-				</div>
+				<button
+					className='grid place-items-center p-4 '
+					onClick={(e) => {
+						e.stopPropagation();
+						deleteToDo();
+					}}
+				>
+					<Cross1Icon className=' w-5 h-5' />
+				</button>
 			</div>
 		</div>
 	);
