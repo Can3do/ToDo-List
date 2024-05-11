@@ -45,7 +45,7 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 			<div className='flex items-center justify-between'>
 				<div className='flex items-center'>
 					<div
-						className='grid place-items-center p-4 '
+						className='grid place-items-center p-4 group '
 						onClick={(e) => {
 							e.stopPropagation();
 							toggleCompleted();
@@ -53,7 +53,7 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 					>
 						<Checkbox
 							checked={completed}
-							className='rounded-full w-5 h-5 data-[state=checked]:opacity-50'
+							className='rounded-full w-5 h-5 data-[state=checked]:opacity-50 transition group-hover:bg-primary'
 						/>
 					</div>
 					<div className='flex gap-8 items-center'>
@@ -84,13 +84,13 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 				</div>
 
 				<button
-					className='grid place-items-center p-4 '
+					className='grid place-items-center p-4 group'
 					onClick={(e) => {
 						e.stopPropagation();
 						deleteToDo();
 					}}
 				>
-					<Cross1Icon className=' w-5 h-5' />
+					<Cross1Icon className=' w-5 h-5 group-hover:text-destructive transition' />
 				</button>
 			</div>
 		</div>
