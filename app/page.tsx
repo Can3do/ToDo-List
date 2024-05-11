@@ -15,12 +15,6 @@ export default function Home() {
 	const uncompletedTodos = todos.filter((todo) => todo.completed === false);
 	const completedTodos = todos.filter((todo) => todo.completed === true);
 
-	const deleteAllCompletedTodos = () => {
-		setTodos((oldTodos) =>
-			oldTodos.filter((todo) => todo.completed === false)
-		);
-	};
-
 	useEffect(() => {
 		localStorage.setItem('todos', JSON.stringify(todos));
 	}, [todos]);
@@ -37,7 +31,6 @@ export default function Home() {
 								size='lg'
 							>
 								<PlusIcon className='w-6 h-6' />
-								
 							</Button>
 						</AddTaskDialog>
 					</TasksContext.Provider>
@@ -61,7 +54,7 @@ export default function Home() {
 					</TasksContext.Provider>
 
 					<TasksContext.Provider value={[completedTodos, setTodos]}>
-						<TasksTable tableTitle='Completed' />
+						<TasksTable tableTitle='Completed' canClearAll />
 					</TasksContext.Provider>
 				</section>
 			</main>

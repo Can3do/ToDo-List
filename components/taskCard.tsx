@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 
 export const TaskCard = ({ task }: { task: TaskType }) => {
 	const [, setTodos] = UseTasksContext();
-	const { id, title, description, date, priority } = task;
+	const { id, title, description, date, priority, completed } = task;
 
 	const deleteToDo = () => {
 		setTodos((oldTodos: TaskType[]) => {
@@ -21,10 +21,10 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 		});
 	};
 
-	const completeTodo = () => {
+	const toggleCompleted = () => {
 		setTodos((oldTodos) =>
 			oldTodos.map((todo) =>
-				todo.id === id ? { ...todo, completed: true } : todo
+				todo.id === id ? { ...todo, completed: !todo.completed } : todo
 			)
 		);
 	};
@@ -51,15 +51,14 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 				<div className='flex flex-col gap-2'>
 					<div className='flex '>
 						<div className='grid place-items-center'>
-							{task.completed === false && (
-								<Checkbox
-									className='rounded-full w-5 h-5 mr-4'
-									onClick={(e) => {
-										e.stopPropagation();
-										completeTodo();
-									}}
-								/>
-							)}
+							<Checkbox
+								checked={completed}
+								className='rounded-full w-5 h-5 mr-4 data-[state=checked]:opacity-50'
+								onClick={(e) => {
+									e.stopPropagation();
+									toggleCompleted();
+								}}
+							/>
 						</div>
 						<div className='flex gap-6 items-center'>
 							<div>
