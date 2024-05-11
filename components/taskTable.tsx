@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { UseTasksContext } from './TaskContext';
+import { UseTasksContext } from './taskContext';
 import { EditTaskDialog } from './editTaskDialog';
 
 export const TasksTable = ({
