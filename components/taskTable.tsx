@@ -22,7 +22,7 @@ export const TasksTable = ({
 			<div className='flex items-center justify-between'>
 				<p>{`${tableTitle} (${tableTasks.length})`}</p>
 				{canClearAll && (
-					<Button variant='secondary' onClick={deleteAllTableTasks}>
+					<Button variant='outline' onClick={deleteAllTableTasks}>
 						Clear all
 					</Button>
 				)}

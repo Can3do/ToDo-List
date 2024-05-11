@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { TaskType } from '@/zodSchemas/schemas';
 import { AddTaskDialog } from '@/components/addTaskDialog';
-import { TasksTable } from '@/components/TasksTable';
+import { TasksTable } from '@/components/taskTable';
 import { TasksContext } from '@/components/TaskContext';
 import { getTasksFromLocalStorage } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
