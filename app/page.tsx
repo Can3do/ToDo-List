@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { TaskType } from '@/zodSchemas/schemas';
 import { AddTaskDialog } from '@/components/addTaskDialog';
 import { TasksTable } from '@/components/taskTable';
-import { TasksContext } from '@/components/TaskContext';
+import { TasksContext } from '@/components/taskContext';
 import { getTasksFromLocalStorage } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from '@radix-ui/react-icons';

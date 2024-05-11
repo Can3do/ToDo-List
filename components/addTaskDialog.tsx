@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { TaskType } from '@/zodSchemas/schemas';
 
-import { Button } from '@/components/ui/button';
-import { PlusIcon } from '@radix-ui/react-icons';
 import {
 	Dialog,
 	DialogContent,
@@ -11,8 +9,8 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
-import { TaskForm } from './TaskForm';
-import { UseTasksContext } from './TaskContext';
+import { TaskForm } from './taskForm';
+import { UseTasksContext } from './taskContext';
 
 export const AddTaskDialog = ({ children }: { children: JSX.Element }) => {
 	const [DialogOpen, setDialogOpen] = useState(false);

@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { Cross1Icon } from '@radix-ui/react-icons';
 
-import { UseTasksContext } from './TaskContext';
+import { UseTasksContext } from './taskContext';
 import { TaskType } from '@/zodSchemas/schemas';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
