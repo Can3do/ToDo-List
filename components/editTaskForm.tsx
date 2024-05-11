@@ -28,7 +28,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { Textarea } from '@/components/ui/textarea';
 import { format } from 'date-fns';
-import { UseTasksContext } from '@/components/TaskContext';
+import { UseTasksContext } from '@/components/taskContext';
 
 export const EditTaskForm = ({
 	setDialogOpen,
