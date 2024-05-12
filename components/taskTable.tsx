@@ -29,12 +29,15 @@ export const TasksTable = ({
 			</div>
 
 			<ul className='flex flex-col gap-4'>
-				{tableTasks.length > 0 &&
+				{tableTasks.length > 0 ? (
 					tableTasks.map((task) => (
 						<li key={task.id}>
 							<EditTaskDialog task={task} />
 						</li>
-					))}
+					))
+				) : (
+					<p className='text-muted-foreground'>Nothing here</p>
+				)}
 			</ul>
 		</div>
 	);
