@@ -76,7 +76,7 @@ export const TaskCard = ({ task }: { task: TaskType }) => {
 							</p>
 						</div>
 						<div className=' flex gap-4'>
-							{priority !== '' && (
+							{priority && (
 								<Badge variant={priority}>{priority}</Badge>
 							)}
 						</div>

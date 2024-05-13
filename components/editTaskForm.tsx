@@ -3,7 +3,11 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ClockIcon, TextAlignMiddleIcon } from '@radix-ui/react-icons';
+import {
+	ClockIcon,
+	TextAlignMiddleIcon,
+	Cross1Icon,
+} from '@radix-ui/react-icons';
 
 import { TaskType } from '@/zodSchemas/schemas';
 import { TaskSchema } from '@/zodSchemas/schemas';
@@ -51,10 +55,9 @@ export const EditTaskForm = ({
 	const [, setTasks] = UseTasksContext();
 	const { id } = todo;
 	const [calendarOpen, setCalendarOpen] = useState(false);
-	const [isPriorityFieldShowing, setIsPriorityFieldShowing] = useState(
-		!!todo.priority
-	);
+
 	const dateValue = form.watch('date');
+	const priorityValue = form.watch('priority');
 
 	const saveTodo = (formData: z.infer<typeof TaskSchema>) => {
 		setTasks((oldTodos: TaskType[]) => {
@@ -125,69 +128,85 @@ export const EditTaskForm = ({
 
 						<div className='flex flex-col gap-4 w-full'>
 							<div className='flex gap-4 items-center h-10'>
-								<button
-									type='button'
-									onClick={() => {
-										setIsPriorityFieldShowing(
-											!isPriorityFieldShowing
-										);
-									}}
-								>
-									<TextAlignMiddleIcon className='w-6 h-6' />
-								</button>
-								{isPriorityFieldShowing && (
-									<FormField
-										control={form.control}
-										name='priority'
-										render={({ field }) => (
-											<FormItem>
-												<FormControl>
-													<Select
-														onValueChange={
-															field.onChange
-														}
-														defaultValue={
-															field.value
-														}
-													>
-														<SelectTrigger>
-															<SelectValue placeholder='Select a priority'></SelectValue>
-														</SelectTrigger>
+								<FormField
+									control={form.control}
+									name='priority'
+									render={({ field }) => (
+										<FormItem className='flex items-center gap-4 h-10 space-y-0'>
+											<button
+												className={cn(
+													'font-normal flex',
+													!field.value &&
+														'text-muted-foreground'
+												)}
+												type='button'
+												onClick={() => {
+													field.onChange('low');
+												}}
+											>
+												<TextAlignMiddleIcon className='w-6 h-6' />
+											</button>
+											<FormControl>
+												{priorityValue && (
+													<>
+														<Select
+															onValueChange={
+																field.onChange
+															}
+															defaultValue={
+																field.value
+															}
+														>
+															<SelectTrigger>
+																<SelectValue placeholder='Select a priority'></SelectValue>
+															</SelectTrigger>
 
-														<SelectContent>
-															<SelectGroup>
-																<SelectItem
-																	value='low'
-																	onClick={(
-																		e
-																	) => {
-																		e.stopPropagation();
-																	}}
-																>
-																	Low
-																</SelectItem>
-																<SelectItem value='medium'>
-																	Medium
-																</SelectItem>
-																<SelectItem value='high'>
-																	High
-																</SelectItem>
-															</SelectGroup>
-														</SelectContent>
-													</Select>
-												</FormControl>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								)}
+															<SelectContent>
+																<SelectGroup>
+																	<SelectItem
+																		value='low'
+																		onClick={(
+																			e
+																		) => {
+																			e.stopPropagation();
+																		}}
+																	>
+																		Low
+																	</SelectItem>
+																	<SelectItem value='medium'>
+																		Medium
+																	</SelectItem>
+																	<SelectItem value='high'>
+																		High
+																	</SelectItem>
+																</SelectGroup>
+															</SelectContent>
+														</Select>
+														<button
+															onClick={(e) => {
+																e.preventDefault();
+																field.onChange(
+																	undefined
+																);
+															}}
+														>
+															<Cross1Icon className=' w-4 h-4 hover:text-destructive transition' />
+														</button>
+													</>
+												)}
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
 							</div>
+
 							<div className='flex gap-4 items-center h-10'>
 								<FormField
 									control={form.control}
 									name='date'
 									render={({ field }) => (
-										<FormItem className='flex flex-col'>
+										<FormItem className='flex gap-4 items-center h-10 space-y-0'>
 											<Popover
 												open={calendarOpen}
 												onOpenChange={setCalendarOpen}
@@ -227,23 +246,38 @@ export const EditTaskForm = ({
 												</PopoverContent>
 											</Popover>
 											<FormMessage />
+											{dateValue !== undefined && (
+												<>
+													<Button
+														className='rounded-full text-'
+														variant='outline'
+														type='button'
+														onClick={() => {
+															setCalendarOpen(
+																!calendarOpen
+															);
+														}}
+													>
+														{format(
+															dateValue,
+															'PPP'
+														)}
+													</Button>
+													<button
+														onClick={(e) => {
+															e.preventDefault();
+															field.onChange(
+																undefined
+															);
+														}}
+													>
+														<Cross1Icon className=' w-4 h-4 hover:text-destructive transition' />
+													</button>
+												</>
+											)}
 										</FormItem>
 									)}
 								/>
-								{dateValue !== undefined && (
-									<div className='flex'>
-										<Button
-											className='rounded-full text-'
-											variant='outline'
-											type='button'
-											onClick={() => {
-												setCalendarOpen(!calendarOpen);
-											}}
-										>
-											{format(dateValue, 'PPP')}
-										</Button>
-									</div>
-								)}
 							</div>
 						</div>
 					</div>
