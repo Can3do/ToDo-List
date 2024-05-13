@@ -8,8 +8,9 @@ export const TaskSchema = z.object({
 		.max(48, 'The title must be shorter than 48 characters.'),
 	description: z
 		.string()
-		.max(512, 'The description must be shorter than 512 characters'),
-	priority: z.enum(['low', 'medium', 'high', '']).optional(),
+		.max(512, 'The description must be shorter than 512 characters')
+		.optional(),
+	priority: z.enum(['low', 'medium', 'high']).optional(),
 	date: z.date().optional(),
 	completed: z.boolean(),
 });

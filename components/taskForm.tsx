@@ -43,8 +43,8 @@ export const TaskForm = ({
 		resolver: zodResolver(TaskSchema),
 		defaultValues: {
 			title: '',
-			description: '',
-			priority: '',
+			description: undefined,
+			priority: undefined,
 			date: undefined,
 			completed: false,
 			id: generateId(),
