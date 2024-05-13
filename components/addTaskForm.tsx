@@ -32,7 +32,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Textarea } from '@/components/ui/textarea';
 import { format } from 'date-fns';
 
-export const TaskForm = ({
+export const AddTaskForm = ({
 	setDialogOpen,
 	onSubmit,
 }: {

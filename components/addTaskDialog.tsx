@@ -9,7 +9,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
-import { TaskForm } from './taskForm';
+import { AddTaskForm } from './addTaskForm';
 import { UseTasksContext } from './taskContext';
 
 export const AddTaskDialog = ({ children }: { children: JSX.Element }) => {
@@ -32,7 +32,10 @@ export const AddTaskDialog = ({ children }: { children: JSX.Element }) => {
 				<DialogHeader className='pb-4'>
 					<DialogTitle>Add new task</DialogTitle>
 				</DialogHeader>
-				<TaskForm setDialogOpen={setDialogOpen} onSubmit={createTodo} />
+				<AddTaskForm
+					setDialogOpen={setDialogOpen}
+					onSubmit={createTodo}
+				/>
 			</DialogContent>
 		</Dialog>
 	);
