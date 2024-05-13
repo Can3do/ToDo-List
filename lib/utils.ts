@@ -9,7 +9,7 @@ export function generateId() {
 	return Date.now().toString(13);
 }
 
-type TodoTypeOnLocalStorage = {
+type TaskOnLocalStorageType = {
 	id: string;
 	title: string;
 	description: string;
@@ -18,24 +18,28 @@ type TodoTypeOnLocalStorage = {
 	completed: string;
 };
 
-export function getTasksFromLocalStorage() {
-	if (
-		typeof localStorage !== 'undefined' &&
-		localStorage.getItem('todos') !== null
-	) {
-		const parsedLocalStorage = JSON.parse(
-			window.localStorage.getItem('todos') as string
-		);
-		const dateParsedLocalStorage = parsedLocalStorage.map(
-			(todo: TodoTypeOnLocalStorage) => {
-				const TransitionObject: any = { ...todo };
-				if (todo.date !== undefined) {
-					TransitionObject.date = new Date(todo.date);
-				}
-				return TransitionObject;
-			}
-		);
-		return dateParsedLocalStorage;
+function parseDate(task: TaskOnLocalStorageType) {
+	const TransitionObject: any = { ...task };
+	if (task.date) {
+		TransitionObject.date = new Date(task.date);
 	}
-	return [];
+	return TransitionObject;
+}
+
+export function getTasksFromLocalStorage() {
+	try {
+		const dataFromLocalStorage = localStorage.getItem('todos');
+
+		if (dataFromLocalStorage) {
+			const parsedTasks = JSON.parse(dataFromLocalStorage);
+			const parsedTasksWithDates = parsedTasks.map(parseDate);
+			return parsedTasksWithDates;
+		}
+		return [];
+	} catch (error) {
+		console.log(
+			`Error al traer las tasks del localStorage. error: ${error}`
+		);
+		return [];
+	}
 }
